@@ -1,0 +1,10 @@
+VISTA PER VISUALIZZARE LE INFORMAZIONI RELATIVE ALLE CONSEGNE DEGLI ORDINI
+UTILE PER I FATTORINI
+create or replace view info_per_consegna as
+select ristorante.citta,cliente.N_TEL,cliente.cap,cliente.via,ordine_casa.n_ordine,prenotazione.data_p as data_da_consegnare from ((cliente join prenotazione on cliente.N_TEL=prenotazione.ID_CL) join ordine on ordine.ID_PRENOTAZIONE=prenotazione.ID_PRENOTAZIONE) join ordine_casa on ordine.n_ordine=ordine_casa.n_ordine join ristorante on ristorante.p_iva=prenotazione.id_ristorante order by prenotazione.id_ristorante;
+
+
+VISTA UTILE AL PROPRIETARIO/I DELLA CATENA DI RISTORANTE PER VISUALIZZARE L'ANDAMENTO DI CIASCUN RISTORANTE.
+CREATE OR REPLACE VIEW INFO_PREN AS
+select RISTORANTE.CITTA,PRENOTAZIONE.ID_RISTORANTE,COUNT(PRENOTAZIONE.id_prenotazione) AS TOT_PREN from prenotazione JOIN RISTORANTE ON RISTORANTE.P_IVA=PRENOTAZIONE.ID_RISTORANTE where PRENOTAZIONE.DATA_P BETWEEN '22-MAG-20' AND (SELECT SYSDATE FROM DUAL) GROUP BY PRENOTAZIONE.ID_RISTORANTE,RISTORANTE.CITTA;
+
